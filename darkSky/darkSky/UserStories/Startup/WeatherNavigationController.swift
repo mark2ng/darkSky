@@ -15,7 +15,6 @@ class WeatherNavigationController: UINavigationController {
 
         let vc = ForecastBuilder.build()
 
-        print("navigation controller loaded")
         pushViewController(vc, animated: true)
     }
 

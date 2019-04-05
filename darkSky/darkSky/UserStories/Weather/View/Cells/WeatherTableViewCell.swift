@@ -13,10 +13,11 @@ class WeatherTableViewCell: UITableViewCell {
 
     // MARK: - Properties
     let weatherLabel = UILabel()
+    static let reuseId = "WeatherTableViewCell"
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: "WeatherTableViewCell")
+        super.init(style: .default, reuseIdentifier: WeatherTableViewCell.reuseId)
 
         weatherLabel.textAlignment = .center
         addSubview(weatherLabel)

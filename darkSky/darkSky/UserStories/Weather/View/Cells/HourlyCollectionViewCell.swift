@@ -11,18 +11,19 @@ import UIKit
 
 class HourlyCollectionViewCell: UICollectionViewCell {
 
+    let timeLabel = UILabel()
     let temperatureLabel = UILabel()
-    let weatherLabel = UILabel()
+    var iconImageView = UIImageView()
 
     static let reuseId = "HourlyCollectionViewCell"
 
     // MARK: - Init
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         addSubview(temperatureLabel)
-        addSubview(weatherLabel)
+        addSubview(timeLabel)
+        addSubview(iconImageView)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -37,16 +38,30 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     }
 
     private func layout() {
-        temperatureLabel.pin
+        let size: CGFloat = 50
+
+        timeLabel.pin
             .sizeToFit()
             .hCenter()
 
-        weatherLabel.pin
+        iconImageView.pin
+            .size(size)
+            .hCenter()
+            .below(of: timeLabel)
+
+        temperatureLabel.pin
             .sizeToFit()
+            .hCenter()
+            .below(of: iconImageView)
+            .marginTop(CGFloat(10))
     }
 
     // MARK: - Public Methods
     func setup(weather: WeatherHourly) {
+        timeLabel.text = weather.currentTime
+        temperatureLabel.text = "\(Int(weather.temperature))˚C"
+        let someIcon = UIImage(named: weather.icon.rawValue)
+        iconImageView.image = someIcon
     }
 
 }

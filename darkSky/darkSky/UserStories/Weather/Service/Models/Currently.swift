@@ -31,7 +31,6 @@ struct Currently: Decodable {
         self.icon = Icon(title: icon)
 
         self.temperature = try container.decode(Double.self, forKey: .temperature)
-        print("!! time = ", currentTime)
     }
 }
 

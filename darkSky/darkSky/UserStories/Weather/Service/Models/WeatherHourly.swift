@@ -49,7 +49,7 @@ enum Summary: String {
 struct WeatherHourly: Decodable {
     let time: Double
     let summary: Summary
-//    let icon: String
+    let icon: Icon
 //    let precipIntensity: Double
 //    let precipProbability: Double
 //    let precipType: String
@@ -69,6 +69,7 @@ struct WeatherHourly: Decodable {
     enum CodingKeys: String, CodingKey {
         case time
         case summary
+        case icon
         case temperature
     }
 
@@ -79,16 +80,18 @@ struct WeatherHourly: Decodable {
         self.temperature = try container.decode(Double.self, forKey: .temperature)
         let weatherType: String = try container.decode(String.self, forKey: .summary)
         self.summary = Summary(title: weatherType)
+        let icon: String = try container.decode(String.self, forKey: .icon)
+        self.icon = Icon(title: icon)
 
     }
 }
 
 extension WeatherHourly {
 
-    var currentDay: String {
+    var currentTime: String {
 
         let formatter = DateFormatter()
-        formatter.dateFormat = "EE HH:mm"
+        formatter.dateFormat = "HH:mm"
         let date = Date(timeIntervalSince1970: time)
         return formatter.string(from: date)
     }

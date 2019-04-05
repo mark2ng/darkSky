@@ -22,10 +22,11 @@ class ForecastViewController: UIViewController {
     let summaryLabel = UILabel()
     let temperatureLabel = UILabel()
     let separatorView = UIView()
+    let separatorForCVView = UIView()
     let collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        flowLayout.estimatedItemSize = CGSize(width: 60, height: 80)
+        flowLayout.estimatedItemSize = CGSize(width: 60, height: 100)
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
         cv.backgroundColor = .white
         cv.showsHorizontalScrollIndicator = false
@@ -66,10 +67,11 @@ class ForecastViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        self.tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherTableViewCell")
+        self.tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: WeatherTableViewCell.reuseId)
         self.collectionView.register(
             HourlyCollectionViewCell.self,
-            forCellWithReuseIdentifier: HourlyCollectionViewCell.reuseId)
+            forCellWithReuseIdentifier: HourlyCollectionViewCell.reuseId
+        )
 
         let refreshButton = UIBarButtonItem(
             barButtonSystemItem: .refresh,
@@ -95,6 +97,10 @@ class ForecastViewController: UIViewController {
         separatorView.pin.height(1)
         separatorView.backgroundColor = #colorLiteral(red: 0.8133929372, green: 0.8132717609, blue: 0.781655848, alpha: 1)
         view.addSubview(separatorView)
+
+        separatorForCVView.pin.height(1)
+        separatorForCVView.backgroundColor = #colorLiteral(red: 0.8133929372, green: 0.8132717609, blue: 0.781655848, alpha: 1)
+        view.addSubview(separatorForCVView)
     }
 
     @objc private func refreshButtonTapped(sender: UIButton) {
@@ -109,6 +115,7 @@ class ForecastViewController: UIViewController {
 
     private func layout() {
         let height: CGFloat = 40
+        let cvHeight: CGFloat = 100
 
         timeLabel.pin
             .horizontally()
@@ -143,11 +150,17 @@ class ForecastViewController: UIViewController {
 
         collectionView.pin
             .horizontally()
-            .height(height * 2)
+            .height(cvHeight)
             .below(of: separatorView)
 
-        tableView.pin
+        separatorForCVView.pin
             .below(of: collectionView)
+            .left(20)
+            .right()
+            .marginTop(5)
+
+        tableView.pin
+            .below(of: separatorForCVView)
             .bottom()
             .left()
             .right()
@@ -176,7 +189,7 @@ extension ForecastViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "WeatherTableViewCell",
+            withIdentifier: WeatherTableViewCell.reuseId,
             for: indexPath
             ) as? WeatherTableViewCell
             else { return UITableViewCell() }
@@ -222,8 +235,9 @@ extension ForecastViewController: UICollectionViewDelegate, UICollectionViewData
             ) as? HourlyCollectionViewCell
             else { return UICollectionViewCell() }
 
-        cell.backgroundColor = .black
-
+        if let weather = forecast?.hourly.data[indexPath.row] {
+            cell.setup(weather: weather)
+        }
         return cell
     }
 
