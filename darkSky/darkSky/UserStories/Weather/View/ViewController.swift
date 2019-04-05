@@ -116,11 +116,15 @@ class ForecastViewController: UIViewController {
     private func layout() {
         let height: CGFloat = 40
         let cvHeight: CGFloat = 100
+        let top: CGFloat = 90
+        let iconSize: CGFloat = 140
+        let left: CGFloat = 20
+        let marginTop: CGFloat = 5
 
         timeLabel.pin
             .horizontally()
             .height(height)
-            .top(10%)
+            .top(top)
 
         locationLabel.pin
             .horizontally()
@@ -128,7 +132,7 @@ class ForecastViewController: UIViewController {
             .below(of: timeLabel)
 
         iconImageView.pin
-            .size(140)
+            .size(iconSize)
             .hCenter()
             .below(of: locationLabel)
 
@@ -144,9 +148,9 @@ class ForecastViewController: UIViewController {
 
         separatorView.pin
             .below(of: summaryLabel)
-            .left(20)
+            .left(left)
             .right()
-            .marginTop(5)
+            .marginTop(marginTop)
 
         collectionView.pin
             .horizontally()
@@ -155,9 +159,9 @@ class ForecastViewController: UIViewController {
 
         separatorForCVView.pin
             .below(of: collectionView)
-            .left(20)
+            .left(left)
             .right()
-            .marginTop(5)
+            .marginTop(marginTop)
 
         tableView.pin
             .below(of: separatorForCVView)

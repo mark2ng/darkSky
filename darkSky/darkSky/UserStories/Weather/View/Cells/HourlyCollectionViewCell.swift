@@ -39,6 +39,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
 
     private func layout() {
         let size: CGFloat = 50
+        let margin: CGFloat = 10
 
         timeLabel.pin
             .sizeToFit()
@@ -53,7 +54,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
             .sizeToFit()
             .hCenter()
             .below(of: iconImageView)
-            .marginTop(CGFloat(10))
+            .marginTop(margin)
     }
 
     // MARK: - Public Methods
