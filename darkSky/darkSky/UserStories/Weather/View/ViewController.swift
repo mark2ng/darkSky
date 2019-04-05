@@ -22,7 +22,16 @@ class ForecastViewController: UIViewController {
     let summaryLabel = UILabel()
     let temperatureLabel = UILabel()
     let separatorView = UIView()
-    let collectionView = UICollectionView()
+    let collectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.estimatedItemSize = CGSize(width: 60, height: 80)
+        let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+        cv.backgroundColor = .white
+        cv.showsHorizontalScrollIndicator = false
+
+        return cv
+    }()
 
     // MARK: - Properties
     var forecast: Forecast? {
@@ -53,15 +62,15 @@ class ForecastViewController: UIViewController {
 
         tableView.dataSource = self
         tableView.delegate = self
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.estimatedItemSize = CGSize(width: 40, height: 30) // !! hardcode size
-        collectionView.collectionViewLayout = flowLayout
+
         collectionView.dataSource = self
         collectionView.delegate = self
+
         self.tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "WeatherTableViewCell")
-        self.collectionView.register(HourlyCollectionViewCell.self,
-                                     forCellWithReuseIdentifier: HourlyCollectionViewCell.reuseId)
+        self.collectionView.register(
+            HourlyCollectionViewCell.self,
+            forCellWithReuseIdentifier: HourlyCollectionViewCell.reuseId)
+
         let refreshButton = UIBarButtonItem(
             barButtonSystemItem: .refresh,
             target: self,
@@ -103,34 +112,27 @@ class ForecastViewController: UIViewController {
 
         timeLabel.pin
             .horizontally()
-//            .left()
-//            .right()
-            .height(5%)
+            .height(height)
             .top(10%)
 
         locationLabel.pin
-            .left()
-            .right()
-            .height(5%)
+            .horizontally()
+            .height(height)
             .below(of: timeLabel)
 
         iconImageView.pin
-//            .height(20%)
             .size(140)
-//            .aspectRatio(1)
             .hCenter()
             .below(of: locationLabel)
 
         temperatureLabel.pin
-            .left()
-            .right()
-            .height(5%)
+            .horizontally()
+            .height(height)
             .below(of: iconImageView)
 
         summaryLabel.pin
-            .left()
-            .right()
-            .height(5%)
+            .horizontally()
+            .height(height)
             .below(of: temperatureLabel)
 
         separatorView.pin
@@ -139,8 +141,13 @@ class ForecastViewController: UIViewController {
             .right()
             .marginTop(5)
 
-        tableView.pin
+        collectionView.pin
+            .horizontally()
+            .height(height * 2)
             .below(of: separatorView)
+
+        tableView.pin
+            .below(of: collectionView)
             .bottom()
             .left()
             .right()
@@ -149,10 +156,6 @@ class ForecastViewController: UIViewController {
 
     private func setupData() {
         if let forecast = forecast {
-//            let formatter = DateFormatter()
-//            formatter.dateFormat = "EE HH:mm:ss"
-//            let date = Date(timeIntervalSince1970: forecast.currently.time)
-//            let currentDay = formatter.string(from: date)
             timeLabel.text = "\(forecast.currently.currentTime)"
             locationLabel.text = forecast.timezone
             summaryLabel.text = forecast.currently.summary
@@ -164,6 +167,7 @@ class ForecastViewController: UIViewController {
 
 }
 
+    // MARK: - UITableViewDataSource, UITableViewDelegate
 extension ForecastViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -197,17 +201,30 @@ extension ForecastViewController: ForecastViewInput {
     func setupTableView(_ forecast: Forecast) {
         self.forecast = forecast
         self.tableView.reloadData()
+        self.collectionView.reloadData()
     }
 
 }
 
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 extension ForecastViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        <#code#>
+        return forecast?.hourly.data.count ?? 0
     }
 
+    func collectionView(_
+        collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: HourlyCollectionViewCell.reuseId,
+            for: indexPath
+            ) as? HourlyCollectionViewCell
+            else { return UICollectionViewCell() }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        <#code#>
+        cell.backgroundColor = .black
+
+        return cell
     }
+
 }

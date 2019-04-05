@@ -78,7 +78,6 @@
 				919FB596DF2075E84DC5D98C /* Pods-darkSky.debug.xcconfig */,
 				BEDB6B53BF532462C8925BA5 /* Pods-darkSky.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
