@@ -12,7 +12,6 @@ import UIKit
 class ForecastViewController: UIViewController {
 
     // MARK: - Subviews
-    let key = "04722e138346054ee6f55cb96403a88b"
     let darkSky = DarkSkyService()
     let tableView = UITableView()
 
@@ -79,7 +78,14 @@ class ForecastViewController: UIViewController {
             action: #selector(refreshButtonTapped)
         )
 
+        let changeCityButton = UIBarButtonItem(
+            barButtonSystemItem: .search,
+            target: self,
+            action: #selector(changeCityButtonTapped)
+        )
+
         self.navigationItem.rightBarButtonItem = refreshButton
+        self.navigationItem.leftBarButtonItem = changeCityButton
 
         timeLabel.textAlignment = .center
         locationLabel.textAlignment = .center
@@ -104,7 +110,10 @@ class ForecastViewController: UIViewController {
     }
 
     @objc private func refreshButtonTapped(sender: UIButton) {
-        output.didLoad()
+        output.didRefresh()
+    }
+
+    @objc private func changeCityButtonTapped(sender: UIButton) {
     }
 
     override func viewWillLayoutSubviews() {

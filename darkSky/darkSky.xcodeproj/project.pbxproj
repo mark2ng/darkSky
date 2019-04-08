@@ -29,6 +29,7 @@
 		7D8D859F22414DF0000492A1 /* Hourly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8D859E22414DF0000492A1 /* Hourly.swift */; };
 		7D8D85A322419A3D000492A1 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8D85A222419A3D000492A1 /* WeatherTableViewCell.swift */; };
 		7D8D85A722427FDD000492A1 /* DetailForecastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8D85A622427FDD000492A1 /* DetailForecastViewController.swift */; };
+		7DF08FB12258DC1300EB175D /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DF08FB02258DC1300EB175D /* City.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 		7D8D859E22414DF0000492A1 /* Hourly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hourly.swift; sourceTree = "<group>"; };
 		7D8D85A222419A3D000492A1 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		7D8D85A622427FDD000492A1 /* DetailForecastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailForecastViewController.swift; sourceTree = "<group>"; };
+		7DF08FB02258DC1300EB175D /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		919FB596DF2075E84DC5D98C /* Pods-darkSky.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-darkSky.debug.xcconfig"; path = "Target Support Files/Pods-darkSky/Pods-darkSky.debug.xcconfig"; sourceTree = "<group>"; };
 		BEDB6B53BF532462C8925BA5 /* Pods-darkSky.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-darkSky.release.xcconfig"; path = "Target Support Files/Pods-darkSky/Pods-darkSky.release.xcconfig"; sourceTree = "<group>"; };
 		D9F7AEED260E195410A0CAE1 /* Pods_darkSky.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_darkSky.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -191,6 +193,7 @@
 				7D0FEDFD224D239E00AF8CA4 /* Daily.swift */,
 				7D0FEDFF224D24AB00AF8CA4 /* WeatherDaily.swift */,
 				7D4EA09722500A97004FB6A4 /* Icon.swift */,
+				7DF08FB02258DC1300EB175D /* City.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -382,6 +385,7 @@
 				7D515545224102AE00B436A6 /* DarkSkyService.swift in Sources */,
 				7D5155322240FFCE00B436A6 /* AppDelegate.swift in Sources */,
 				7D8D85A722427FDD000492A1 /* DetailForecastViewController.swift in Sources */,
+				7DF08FB12258DC1300EB175D /* City.swift in Sources */,
 				7D8D859F22414DF0000492A1 /* Hourly.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

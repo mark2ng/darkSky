@@ -11,6 +11,7 @@ import Foundation
 // MARK: - Presenter
 protocol ForecastViewOutput {
     func didLoad()
+    func didRefresh()
 }
 
 protocol ForecastInteractorOutput: class {

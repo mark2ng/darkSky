@@ -28,12 +28,18 @@ extension ForecastPresenter: ForecastViewOutput {
     func didRefresh() {
         interactor.getForecast()
     }
+
 }
 
 extension ForecastPresenter: ForecastInteractorOutput {
 
     func forecastFetched(_ forecast: Forecast) {
         view?.setupTableView(forecast) // передать forecast
+    }
+
+    func updateForecastFetched(_ forecast: Forecast) {
+
+        view?.setupTableView(forecast)
     }
 
 }
