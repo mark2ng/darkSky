@@ -19,12 +19,15 @@ extension ForecastInteractor: ForecastInteractorInput {
     func getForecast() {
         darkSky.getTemperature({ [unowned self] forecast in
             self.output?.forecastFetched(forecast)
+            }, onError: {
+                self.output?.forecastDidNotFetched()
         })
     }
 
     func updateForecast() {
         darkSky.getTemperature({ [unowned self] forecast in
-            self.output?.forecastFetched(forecast)
+            self.output?.updateForecastFetched(forecast)
+            }, onError: {
         })
     }
 

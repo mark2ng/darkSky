@@ -17,6 +17,17 @@ class ForecastPresenter {
         self.interactor = interactor
     }
 
+    private func makeDailyCells(from forecast: Forecast) -> [DailyCellType] {
+        return forecast.daily.data.map {
+            DailyCellType.regular($0)
+        }
+    }
+
+    private func makeHourlyCells(from forecast: Forecast) -> [HourlyCellType] {
+        return forecast.hourly.data.map {
+            HourlyCellType.regular($0)
+        }
+    }
 }
 
 extension ForecastPresenter: ForecastViewOutput {
@@ -34,12 +45,19 @@ extension ForecastPresenter: ForecastViewOutput {
 extension ForecastPresenter: ForecastInteractorOutput {
 
     func forecastFetched(_ forecast: Forecast) {
-        view?.setupTableView(forecast) // передать forecast
+        view?.setupTableView(
+            with: makeDailyCells(from: forecast),
+            cvmodels: makeHourlyCells(from: forecast),
+            currently: forecast.currently, timeZone: forecast.timezone)
+    }
+
+    func forecastDidNotFetched() {
+        view?.showError()
     }
 
     func updateForecastFetched(_ forecast: Forecast) {
-
-        view?.setupTableView(forecast)
+//        view?.setupTableView(with: makeCells(from: forecast))
+//        view?.setupTableView(forecast)
     }
 
 }

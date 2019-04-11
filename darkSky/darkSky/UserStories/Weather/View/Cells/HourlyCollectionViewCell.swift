@@ -21,9 +21,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        addSubview(temperatureLabel)
-        addSubview(timeLabel)
-        addSubview(iconImageView)
+        addSubviews([temperatureLabel, timeLabel, iconImageView])
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -16,6 +16,8 @@ protocol ForecastViewOutput {
 
 protocol ForecastInteractorOutput: class {
     func forecastFetched(_ forecast: Forecast)
+    func forecastDidNotFetched()
+    func updateForecastFetched(_ forecast: Forecast)
 }
 
 protocol ForecastInteractorInput {
@@ -23,5 +25,19 @@ protocol ForecastInteractorInput {
 }
 
 protocol ForecastViewInput {
-    func setupTableView(_ forecast: Forecast)
+    func setupTableView(with tvmodels: [DailyCellType],
+                        cvmodels: [HourlyCellType], currently: Currently, timeZone: String)
+    func showError()
+}
+
+enum DailyCellType {
+    case regular(_ forecast: WeatherDaily)
+}
+
+enum HourlyCellType {
+    case regular(_ forecast: WeatherHourly)
+}
+
+protocol CityViewControllerDelegate {
+    func didSelectCity(_ city: City)//struct )
 }

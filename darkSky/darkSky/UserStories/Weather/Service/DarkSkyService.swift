@@ -16,21 +16,20 @@ class DarkSkyService {
     private let latitude = 56
     private let longitude = 38
 
-    func getTemperature(_ success: @escaping (Forecast) -> Void) {
+    func getTemperature(_ success: @escaping (Forecast) -> Void, onError: @escaping () -> Void) {
 
         AF.request(
             "https://api.darksky.net/forecast/\(key)/\(latitude),\(longitude)",
-            parameters: parameters
-            )
-            .responseJSON { (response) in
-
-                if let data = response.data {
-
-                    guard let forecast = try? JSONDecoder().decode(Forecast.self, from: data) else { return }
-
-                    success(forecast)
+            parameters: parameters).responseData { (response) in
+                switch response.result {
+                    case .success(let value):
+                        guard let forecast = try? JSONDecoder().decode(Forecast.self, from: value) else { return }
+                        success(forecast)
+                    case .failure(let error):
+                        print(error)
+                        onError()
                 }
-            }
+        }
     }
 
 }
