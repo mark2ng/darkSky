@@ -13,13 +13,10 @@ class DarkSkyService {
 
     private let parameters = ["lang": "ru", "units": "si"]
     private let key = "04722e138346054ee6f55cb96403a88b"
-    private let latitude = 56
-    private let longitude = 38
 
-    func getTemperature(_ success: @escaping (Forecast) -> Void, onError: @escaping () -> Void) {
-
+    func getTemperature(city: City, _ success: @escaping (Forecast) -> Void, onError: @escaping () -> Void) {
         AF.request(
-            "https://api.darksky.net/forecast/\(key)/\(latitude),\(longitude)",
+            "https://api.darksky.net/forecast/\(key)/\(city.latitude),\(city.longitude)",
             parameters: parameters).responseData { (response) in
                 switch response.result {
                     case .success(let value):
@@ -31,5 +28,4 @@ class DarkSkyService {
                 }
         }
     }
-
 }

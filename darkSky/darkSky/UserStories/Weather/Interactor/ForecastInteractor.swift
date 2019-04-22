@@ -12,12 +12,13 @@ class ForecastInteractor {
 
     weak var output: ForecastInteractorOutput?
     let darkSky = DarkSkyService()
+    var currentCity = City(name: "Москва", latitude: 56, longitude: 38)
 }
 
 extension ForecastInteractor: ForecastInteractorInput {
 
     func getForecast() {
-        darkSky.getTemperature({ [unowned self] forecast in
+        darkSky.getTemperature(city: currentCity, { [unowned self] forecast in
             self.output?.forecastFetched(forecast)
             }, onError: {
                 self.output?.forecastDidNotFetched()
@@ -25,10 +26,16 @@ extension ForecastInteractor: ForecastInteractorInput {
     }
 
     func updateForecast() {
-        darkSky.getTemperature({ [unowned self] forecast in
-            self.output?.updateForecastFetched(forecast)
+        darkSky.getTemperature(city: currentCity, { [unowned self] forecast in
+            self.output?.forecastFetched(forecast)
             }, onError: {
+                self.output?.forecastDidNotFetched()
         })
+    }
+
+    func updateCity(with city: City) {
+        currentCity = city
+        getForecast()
     }
 
 }

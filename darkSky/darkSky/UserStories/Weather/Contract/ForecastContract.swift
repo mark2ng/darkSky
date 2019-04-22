@@ -12,6 +12,7 @@ import Foundation
 protocol ForecastViewOutput {
     func didLoad()
     func didRefresh()
+    func didLoadWith(newCity: City)
 }
 
 protocol ForecastInteractorOutput: class {
@@ -22,22 +23,12 @@ protocol ForecastInteractorOutput: class {
 
 protocol ForecastInteractorInput {
     func getForecast()
+    func updateForecast()
+    func updateCity(with city: City)
 }
 
 protocol ForecastViewInput {
     func setupTableView(with tvmodels: [DailyCellType],
                         cvmodels: [HourlyCellType], currently: Currently, timeZone: String)
     func showError()
-}
-
-enum DailyCellType {
-    case regular(_ forecast: WeatherDaily)
-}
-
-enum HourlyCellType {
-    case regular(_ forecast: WeatherHourly)
-}
-
-protocol CityViewControllerDelegate {
-    func didSelectCity(_ city: City)//struct )
 }

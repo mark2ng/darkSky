@@ -13,13 +13,22 @@ class ForecastViewController: UIViewController {
 
     // MARK: - Subviews
     let tableView = UITableView()
-    let locationLabel = UILabel()
-    let timeLabel = UILabel()
+    let locationLabel = UILabel().with {
+        $0.textAlignment = .center
+    }
     var iconImageView = UIImageView()
-    let summaryLabel = UILabel()
-    let temperatureLabel = UILabel()
-    let separatorView = UIView()
-    let separatorForCVView = UIView()
+    let summaryLabel = UILabel().with {
+        $0.textAlignment = .center
+    }
+    let temperatureLabel = UILabel().with {
+        $0.textAlignment = .center
+    }
+    let separatorView = UIView().with {
+        $0.backgroundColor = #colorLiteral(red: 0.8133929372, green: 0.8132717609, blue: 0.781655848, alpha: 1)
+    }
+    let separatorForCVView = UIView().with {
+        $0.backgroundColor = #colorLiteral(red: 0.8133929372, green: 0.8132717609, blue: 0.781655848, alpha: 1)
+    }
     let collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -30,23 +39,14 @@ class ForecastViewController: UIViewController {
 
         return cv
     }()
-    let refreshButton = UIBarButtonItem(
-        barButtonSystemItem: .refresh,
-        target: self,
-        action: #selector(refreshButtonTapped))
-
-    let changeCityButton = UIBarButtonItem(
-        barButtonSystemItem: .search,
-        target: self,
-        action: #selector(changeCityButtonTapped))
 
     // MARK: - Properties
-    private var tableViewCells = [DailyCellType]() {
+    var tableViewCells = [DailyCellType]() {
         didSet {
             tableView.reloadData()
         }
     }
-    private var collectionViewCells = [HourlyCellType]() {
+    var collectionViewCells = [HourlyCellType]() {
         didSet {
             collectionView.reloadData()
         }
@@ -83,14 +83,19 @@ class ForecastViewController: UIViewController {
         self.collectionView.register(
             HourlyCollectionViewCell.self,
             forCellWithReuseIdentifier: HourlyCollectionViewCell.reuseId)
+
+        addNavigationItem()
     }
 
-// MARK: - NavigationItem
+    // MARK: - NavigationItem
     @objc private func refreshButtonTapped(sender: UIButton) {
         output.didRefresh()
     }
 
     @objc private func changeCityButtonTapped(sender: UIButton) {
+        let vc = ItemSelectionBuilder.build()
+        vc.delegate = self
+        self.present(vc, animated: true, completion: nil)
     }
 
     override func viewWillLayoutSubviews() {
@@ -101,28 +106,45 @@ class ForecastViewController: UIViewController {
 
 }
 
-extension ForecastViewController {
+extension ForecastViewController: ItemSelectionViewControllerDelegate {
+
+    func didSelectCity(_ city: City) {
+        output.didLoadWith(newCity: city)
+    }
+
+}
+
+private extension ForecastViewController {
 
     // MARK: - Castomize subview
     private func castomizeSubviews() {
 
-        self.navigationItem.rightBarButtonItem = refreshButton
-        self.navigationItem.leftBarButtonItem = changeCityButton
-
-        timeLabel.textAlignment = .center
-        locationLabel.textAlignment = .center
-        summaryLabel.textAlignment = .center
-        temperatureLabel.textAlignment = .center
-
-        separatorView.pin.height(1)
-        separatorView.backgroundColor = #colorLiteral(red: 0.8133929372, green: 0.8132717609, blue: 0.781655848, alpha: 1)
-        separatorForCVView.pin.height(1)
-        separatorForCVView.backgroundColor = #colorLiteral(red: 0.8133929372, green: 0.8132717609, blue: 0.781655848, alpha: 1)
-
-        let subviews = [tableView, locationLabel, timeLabel, summaryLabel, iconImageView, temperatureLabel,
-                        collectionView, separatorView, separatorForCVView]
+        let subviews = [tableView,
+                        locationLabel,
+                        summaryLabel,
+                        iconImageView,
+                        temperatureLabel,
+                        collectionView,
+                        separatorView,
+                        separatorForCVView]
 
         view.addSubviews(subviews)
+    }
+
+    // MARK: - Add Navigation Item
+    func addNavigationItem() {
+        let refreshButton = UIBarButtonItem(
+            barButtonSystemItem: .refresh,
+            target: self,
+            action: #selector(refreshButtonTapped))
+
+        let changeCityButton = UIBarButtonItem(
+            barButtonSystemItem: .search,
+            target: self,
+            action: #selector(changeCityButtonTapped))
+
+        self.navigationItem.rightBarButtonItem = refreshButton
+        self.navigationItem.leftBarButtonItem = changeCityButton
     }
 
     // MARK: - Layout
@@ -134,15 +156,10 @@ extension ForecastViewController {
         let left: CGFloat = 20
         let marginTop: CGFloat = 5
 
-        timeLabel.pin
-            .horizontally()
-            .height(height)
-            .top(top)
-
         locationLabel.pin
             .horizontally()
             .height(height)
-            .below(of: timeLabel)
+            .top(top)
 
         iconImageView.pin
             .size(iconSize)
@@ -160,6 +177,7 @@ extension ForecastViewController {
             .below(of: temperatureLabel)
 
         separatorView.pin
+            .height(1)
             .below(of: summaryLabel)
             .left(left)
             .right()
@@ -171,6 +189,7 @@ extension ForecastViewController {
             .below(of: separatorView)
 
         separatorForCVView.pin
+            .height(1)
             .below(of: collectionView)
             .left(left)
             .right()
@@ -186,52 +205,12 @@ extension ForecastViewController {
 
     // MARK: - Setup data
     private func setupData(with model: Currently, timeZone: String) {
-        timeLabel.text = "\(model.currentTime)"
         locationLabel.text = timeZone
         summaryLabel.text = model.summary
         temperatureLabel.text = "\(Int(model.temperature))˚C"
         let someIcon = UIImage(named: model.icon.rawValue)
         iconImageView.image = someIcon
     }
-
-}
-
-    // MARK: - UITableViewDataSource, UITableViewDelegate
-extension ForecastViewController: UITableViewDataSource, UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableViewCells.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: WeatherTableViewCell.reuseId,
-            for: indexPath) as? WeatherTableViewCell
-            else { return UITableViewCell() }
-
-        let model = tableViewCells[indexPath.row]
-        switch model {
-        case .regular(let weatherDaily):
-            cell.setup(weather: weatherDaily)
-        }
-
-        return cell
-    }
-
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let model = forecast?.hourly.data[indexPath.row]
-//        let vc = DetailForecastViewController()
-//        vc.weather = model
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-
-    //let vc = CityModalViewController()
-    // vc.delegate = self
-    //extension ForecastViewController: CityViewControllerDelegate {
-    //    func didSelectCity(_ city: City) {
-    //    output.getWeather(for: city)
-
-//}
 
 }
 
@@ -252,43 +231,6 @@ extension ForecastViewController: ForecastViewInput {
         alert.addAction(UIAlertAction(title: "Отменна", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-    }
-
-}
-
-// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-extension ForecastViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionViewCells.count
-    }
-
-    func collectionView(_
-        collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: HourlyCollectionViewCell.reuseId,
-            for: indexPath
-            ) as? HourlyCollectionViewCell
-            else { return UICollectionViewCell() }
-
-        let model = collectionViewCells[indexPath.row]
-        switch model {
-        case .regular(let weatherHourly):
-            cell.setup(weather: weatherHourly)
-        }
-
-        return cell
-    }
-
-}
-
-extension UIView {
-
-    func addSubviews(_ views: [UIView]) {
-        views.forEach {
-            addSubview($0)
-        }
     }
 
 }

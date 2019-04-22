@@ -12,15 +12,17 @@ import UIKit
 class WeatherTableViewCell: UITableViewCell {
 
     // MARK: - Properties
-    let weatherLabel = UILabel()
+    let temperatureMinLabel = UILabel()
+    let temperatureMaxLabel = UILabel()
+    let currentDayLabel = UILabel()
+
     static let reuseId = "WeatherTableViewCell"
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: WeatherTableViewCell.reuseId)
 
-        weatherLabel.textAlignment = .center
-        addSubview(weatherLabel)
+        addSubviews([temperatureMinLabel, temperatureMaxLabel, currentDayLabel])
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -37,23 +39,28 @@ class WeatherTableViewCell: UITableViewCell {
     private func layout() {
         let margin: CGFloat = 15
 
-        weatherLabel.pin
+        currentDayLabel.pin
             .sizeToFit()
             .left(margin)
-            .right()
             .vCenter()
+
+        temperatureMinLabel.pin
+            .sizeToFit()
+            .center()
+
+        temperatureMaxLabel.pin
+            .sizeToFit()
+            .right(margin)
+            .vCenter()
+
     }
 
     // MARK: - Public Methods
     func setup(weather: WeatherDaily) {
 
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMMM"
-//        "EE HH:mm"
-        let date = Date(timeIntervalSince1970: weather.time)
-        let currentDay = formatter.string(from: date)
-
-        weatherLabel.text = "\(currentDay) Min: \(Int(weather.temperatureMin))˚C  Max: \(Int(weather.temperatureMax))˚C"
+        currentDayLabel.text = weather.currentDay
+        temperatureMinLabel.text = "Min: \(Int(weather.temperatureMin))˚C"
+        temperatureMaxLabel.text = "Max: \(Int(weather.temperatureMax))˚C"
     }
 
 }

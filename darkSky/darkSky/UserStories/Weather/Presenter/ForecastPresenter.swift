@@ -40,6 +40,10 @@ extension ForecastPresenter: ForecastViewOutput {
         interactor.getForecast()
     }
 
+    func didLoadWith(newCity: City) {
+        interactor.updateCity(with: newCity)
+    }
+
 }
 
 extension ForecastPresenter: ForecastInteractorOutput {

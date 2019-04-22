@@ -61,6 +61,8 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         temperatureLabel.text = "\(Int(weather.temperature))˚C"
         let someIcon = UIImage(named: weather.icon.rawValue)
         iconImageView.image = someIcon
+
+        setNeedsLayout()
     }
 
 }
