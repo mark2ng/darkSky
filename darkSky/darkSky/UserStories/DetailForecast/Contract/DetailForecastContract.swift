@@ -8,4 +8,18 @@
 
 import Foundation
 
+protocol DetailForecastViewOutput {
+    func didLoad()
+}
 
+protocol DetailForecastViewInput: class {
+    func setupData(with model: [HourlyCellType])
+}
+
+protocol DetailForecastInteractorOutput: class {
+    func forecastFetched(_ forecast: Forecast)
+}
+
+protocol DetailForecastInteractorInput {
+    func getForecast()
+}
