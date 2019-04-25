@@ -8,15 +8,40 @@
 
 import UIKit
 
-class WeatherNavigationController: UINavigationController {
+enum WeatherScreen {
+    case forecast
+    case detail(weather: WeatherDaily, city: City)
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+class MainRouter {
+    var navigationController: UINavigationController?
 
-        let vc = ForecastBuilder.build()
+    init(window: UIWindow?) {
+        navigationController = UINavigationController()
+        window?.rootViewController = navigationController
+        navigate(to: .forecast)
+    }
 
-        print("navigation controller loaded")
-        pushViewController(vc, animated: true)
+    func navigate(to screen: WeatherScreen) {
+        switch screen {
+        case .forecast:
+            let vc = ForecastBuilder.build()
+            navigationController?.pushViewController(vc, animated: true)
+        default:
+            break
+        }
     }
 
 }
+
+//class WeatherNavigationController: UINavigationController {
+//
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//
+//        let vc = ForecastBuilder.build()
+//
+//        pushViewController(vc, animated: true)
+//    }
+//
+//}
