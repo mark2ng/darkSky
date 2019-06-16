@@ -7,6 +7,8 @@
 //
 
 import PinLayout
+import RxCocoa
+import RxSwift
 import UIKit
 
 class ForecastViewController: UIViewController {
@@ -53,7 +55,7 @@ class ForecastViewController: UIViewController {
         }
     }
     let output: ForecastViewOutput
-
+    private let disposeBag = DisposeBag()
     // MARK: - Init
     init(output: ForecastViewOutput) {
         self.output = output
@@ -85,10 +87,14 @@ class ForecastViewController: UIViewController {
         addNavigationItem()
     }
 
+//    private func bindObservables() {
+//        refreshButton.rx.tap
+//    }
+
     // MARK: - NavigationItem
-    @objc private func refreshButtonTapped(sender: UIButton) {
-        output.didRefresh()
-    }
+//    @objc private func refreshButtonTapped(sender: UIButton) {
+//        output.didRefresh()
+//    }
 
     @objc private func changeCityButtonTapped(sender: UIButton) {
         let vc = ItemSelectionBuilder.build()
@@ -134,12 +140,22 @@ private extension ForecastViewController {
         let refreshButton = UIBarButtonItem(
             barButtonSystemItem: .refresh,
             target: self,
-            action: #selector(refreshButtonTapped))
+            action: nil)
 
         let changeCityButton = UIBarButtonItem(
             barButtonSystemItem: .search,
             target: self,
-            action: #selector(changeCityButtonTapped))
+            action: nil)
+
+        refreshButton.rx.tap.subscribe(onNext: { [unowned self] _ in
+            self.output.didRefresh()
+        }).disposed(by: disposeBag)
+
+        changeCityButton.rx.tap.subscribe(onNext: { [unowned self] _ in
+            let vc = ItemSelectionBuilder.build()
+            vc.delegate = self
+            self.present(vc, animated: true, completion: nil)
+        }).disposed(by: disposeBag)
 
         self.navigationItem.rightBarButtonItem = refreshButton
         self.navigationItem.leftBarButtonItem = changeCityButton

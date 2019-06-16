@@ -11,7 +11,7 @@ import Foundation
 
 class DarkSkyService {
 
-    private let parameters = ["lang": "ru", "units": "si"]
+    private let parameters = ["lang": "en", "units": "si"]
     private let key = "04722e138346054ee6f55cb96403a88b"
 
     func getTemperature(city: City, date: Int? = nil,

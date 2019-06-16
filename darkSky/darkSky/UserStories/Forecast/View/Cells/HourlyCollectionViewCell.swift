@@ -58,7 +58,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     // MARK: - Public Methods
     func setup(weather: WeatherHourly) {
         timeLabel.text = weather.currentTime
-        temperatureLabel.text = weather.temperatureAsString
+        temperatureLabel.text = weather.temperatureAsStringForCV
         let someIcon = UIImage(named: weather.icon.rawValue)
         iconImageView.image = someIcon
 

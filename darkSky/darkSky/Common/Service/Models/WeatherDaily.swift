@@ -33,11 +33,17 @@ extension WeatherDaily {
     }
 
     var temperatureMinAsString: String {
-        return "От: \(Int(temperatureMin))˚C"
+        let formatString = NSLocalizedString("Min: ", comment: "Minimum temperature")
+        let degreeString = NSLocalizedString("degree", comment: "")
+        return formatString + String.localizedStringWithFormat(degreeString, Int(temperatureMin))
+//        return "От: \(Int(temperatureMax))˚C"
     }
 
     var temperatureMaxAsString: String {
-        return "До: \(Int(temperatureMax))˚C"
+        let formatString = NSLocalizedString("Max: ", comment: "Maximum temperature")
+        let degreeString = NSLocalizedString("degree", comment: "")
+        return formatString + String.localizedStringWithFormat(degreeString, Int(temperatureMax))
+//        return "До: \(Int(temperatureMax))˚C"
     }
 
 }

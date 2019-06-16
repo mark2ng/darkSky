@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  darkSky
+
+  Created by Илья Маркин on 10/06/2019.
+  Copyright © 2019 MarK2ng. All rights reserved.
+*/
+
+"Min: " = "Мин: ";
+"Max: " = "Макс: ";
+"Moscow" = "Москва";
+"Istanbul" = "Стамбул";
+"London" = "Лондон";
+"Paris" = "Париж";

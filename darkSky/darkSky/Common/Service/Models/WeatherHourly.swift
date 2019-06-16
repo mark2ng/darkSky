@@ -96,8 +96,13 @@ extension WeatherHourly {
         return formatter.string(from: date)
     }
 
-    var temperatureAsString: String {
+    var temperatureAsStringForCV: String {
         return "\(Int(temperature))˚C"
+    }
+
+    var temperatureAsString: String {
+        let formatString = NSLocalizedString("degree", comment: "temperature")
+        return String.localizedStringWithFormat(formatString, Int(temperature))
     }
 
 }

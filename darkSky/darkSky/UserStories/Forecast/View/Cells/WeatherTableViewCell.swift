@@ -46,11 +46,14 @@ class WeatherTableViewCell: UITableViewCell {
 
         temperatureMinLabel.pin
             .sizeToFit()
-            .center()
+            .marginLeft(margin)
+            .after(of: currentDayLabel)
+            .vCenter()
 
         temperatureMaxLabel.pin
             .sizeToFit()
-            .right(margin)
+            .marginLeft(margin)
+            .after(of: temperatureMinLabel)
             .vCenter()
 
     }
